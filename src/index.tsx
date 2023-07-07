@@ -1,5 +1,6 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
+import React, { Suspense } from 'react';
+import ReactDOM from 'react-dom/client';
+
 import { ErrorBoundary } from 'react-error-boundary';
 import { SWRConfig } from 'swr';
 
@@ -9,19 +10,27 @@ import reportWebVitals from './reportWebVitals';
 import App from './App';
 import { ErrorFallback } from './components/ErrorFallback';
 import { fetcher } from './utils/fetcher';
+import { Loading } from './components/Loading';
 
-ReactDOM.render(
+ReactDOM.createRoot(document.getElementById('root')!).render(
   <ErrorBoundary FallbackComponent={ErrorFallback}>
+    <Suspense fallback={<Loading />}>
     <React.StrictMode>
-      <SWRConfig value={{ fetcher }}>
+      <SWRConfig value={{ fetcher, suspense: true }}>
         <App />
       </SWRConfig>
     </React.StrictMode>
-  </ErrorBoundary>,
-  document.getElementById('root')
+    </Suspense>
+   
+  </ErrorBoundary>
 );
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
 // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 reportWebVitals();
+
+// "@types/react": "^18.2.0",
+//     "@types/react-dom": "^18.2.0",
+// "react": "^18.2.0",
+//     "react-dom": "^18.2.0",

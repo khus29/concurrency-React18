@@ -1,29 +1,32 @@
-import { useState } from 'react';
+import { Suspense, useState } from 'react';
 import useSWR from 'swr';
 import type { Account } from '../../types';
+import { Loading } from '../Loading';
 import { UserDetails } from './UserDetails';
 
 export function UserList() {
   const [selectedUser, setSelectedUser] = useState<Account | null>(null);
-  const { data, error } = useSWR<Account[], Error>(
+  const { data } = useSWR<Account[], Error>(
     `${process.env.REACT_APP_API_BASE}/accounts`
   );
 
-  if (error) {
-    return <div>{error.message}</div>;
-  }
+  // if (error) {
+  //   return <div>{error.message}</div>;
+  // }
 
-  if (!data) {
-    return <div>Loading...</div>;
-  }
+  // if (!data) {
+  //   return <div>Loading...</div>;
+  // }
 
   return (
     <div className="row">
+    <Suspense fallback={<Loading />}>
+
       <h2 className="text-center mt-5">Users</h2>
 
       <div className="col-3 g-2">
         <ul className="list-group">
-          {data.map((user) => (
+          {data?.map((user) => (
             <li
               key={user.id}
               className={
@@ -50,6 +53,7 @@ export function UserList() {
           />
         )}
       </div>
+      </Suspense>
     </div>
   );
 }
