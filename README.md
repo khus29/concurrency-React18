@@ -28,6 +28,11 @@ This API keeps the UI responsive by telling React to defer updating the parts of
 useDefferedValue takes in a state value and a timeout in milliseconds and returns the deferred version of that state value. The timeout tells React how long it should delay the deferred value.
 
 # Concurrent SSR
+SSR do the entire render of the HTML page, and wait until it's completely finished before sending it to the browser. Even if that HTML gets to the browser faster, it still needs to be hydrated. it is an all-or-nothing operation, requiring the entire page's JavaScript to be downloaded.
+
+## Streaming + Selective Hydartion
+React 18's <Suspense> allows the page to be broken up into chunks using <Suspense>. Now, the server can start streaming HTML as soon as one of these chunks is ready.
+We can use a combination of <Suspense> and React.lazy() to achieve partial hydration as well. React will now record interactions with various parts of the page, and prioritize hydration based on what has been interacted with. 
 
 
 # Cons of using Concurrent Mode in React
