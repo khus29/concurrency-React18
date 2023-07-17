@@ -1,46 +1,36 @@
-# Getting Started with Create React App
+# Concurrent Mode in React
+React could only handle one task at a time in the past, and a task could not be interrupted once it had started. This approach is referred to as Blocking Rendering.
+In Concurrent mode render simultaneously without blocking the user interface. Therefore, a user can interact with the page without noticing a re-render.
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This is aimed at increasing the performance of the application, and with that, we can prioritize what component renders, and we can update the part of the component tree that changed.
+Concurrent Mode in React adds a new set of lifecycle methods for optimizing the rendering performance of the components. 
 
-## Available Scripts
+It uses an algorithm called the Time Slicing technique that breaks the user interface into smaller, prioritized chunks, which get rendered by order of importance, thereby increasing the response time for user interactions with the interfaces. 
 
-In the project directory, you can run:
+# Concurrent Features
+With concurrent rendering, we can improve the app’s performance by declaring some state updates as non-urgent to keep the browser responsive. It will be automatically enabled in the specific parts of the app that use the new concurrent features because concurrent features were built on top of concurrent rendering.
 
-### `npm start`
+## startTransition API
+Introduced with React 18 this API helps us keep the app responsive without blocking the user interactions by allowing to mark specific updates as transitions.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+There are two categories of state updates in React:
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+-> Urgent updates: show direct interaction like clicking, typing, etc.
+-> Transition updates: change UI views
+React considers state updates wrapped in startTransition as non-urgent, so they can be suspended or interrupted by urgent updates.
 
-### `npm test`
+## useTransition API
+React can also track and update pending state transitions using the useTransition hook with an **isPending** flag. This lets us display loading feedback to the users, letting them know that work is happening in the background.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## useDefferedValue API
+This API keeps the UI responsive by telling React to defer updating the parts of a screen that take too long. For example, if we have a part of a UI that renders immediately and another part that needs to take some time, we can defer the part that requires more time by showing its old value while other components update.
 
-### `npm run build`
+useDefferedValue takes in a state value and a timeout in milliseconds and returns the deferred version of that state value. The timeout tells React how long it should delay the deferred value.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+# Concurrent SSR
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+# Cons of using Concurrent Mode in React
+1. API Instability
+2. Complexity increase
+3. Lim limited browser support
